@@ -1,6 +1,17 @@
+
+<h1 align="center">
+	<img width="600" src="media/testing-tools.jpeg" alt="Testing tools">
+	<br>
+	<br>
+</h1>
+
+
+
 # Hey! It's fantastic to see you around! <img src="/Hi.gif" width="30px" height="30px">
-![](https://komarev.com/ghpvc/?username=prog-harsh&style=for-the-badge&color=0891b2&labelColor=1c1917)
+<!--![](https://komarev.com/ghpvc/?username=pranjal0612&style=for-the-badge&color=0891b2&labelColor=1c1917) -->
 <h3 align="center">A passionate Automation Tester(QA Automation Engineer) from India</h3>
+
+
 
 ## 🚀 About Me
 I'm a **QA Automation Tester** passionate about ensuring software quality and delivering exceptional user experiences. With expertise in **Core Java**, **Playwright**, **Selenium**, and other cutting-edge testing tools, I specialize in creating reliable, scalable, and efficient test automation frameworks.
