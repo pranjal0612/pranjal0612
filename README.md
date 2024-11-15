@@ -60,10 +60,6 @@ I'm a **QA Automation Tester** passionate about ensuring software quality and de
   <img alt="languages" src="https://github-readme-stats.vercel.app/api/top-langs/?username=pranjal0612&layout=compact&hide_border=true&theme=radical" />
 
 ---
-### 💡 Fun Fact
-I believe in finding bugs before users do! 🐞
-
----
 
 <p align="center">
    <img src="/github-contribution-grid-snake.svg" alt="snake">
