@@ -15,6 +15,10 @@ I'm a **QA Automation Tester** passionate about ensuring software quality and de
 ## 📫 Find out more about me & feel free to connect with me here:
 <p align="center">
 	<a
+		href-"https://www.linkedin.com/in/pranjal-singh-b5b7ab342">
+		<img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" />
+	</a>
+	<a
 	 href="https://www.facebook.com/profile.php?id=100017563573221">
   <img  src="https://img.shields.io/badge/Facebook-E4405F?style=for-the-badge&logo=facebook&logoColor=white" />
 </a>
@@ -38,6 +42,7 @@ I'm a **QA Automation Tester** passionate about ensuring software quality and de
 
 ### 💻 Performance Testing
 ![JMeter](https://img.shields.io/badge/JMeter-D22128?style=for-the-badge&logo=apache-jmeter&logoColor=white)
+![Gatling](https://img.shields.io/badge/Gatling-FF5A5F?style=for-the-badge&logo=gatling&logoColor=white)
 
 ### 🧑🏻‍💻 Development Tools
 ![Maven](https://img.shields.io/badge/Maven-C71A36?style=for-the-badge&logo=apache-maven&logoColor=white)
