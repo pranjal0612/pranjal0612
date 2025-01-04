@@ -15,7 +15,7 @@ I'm a **QA Automation Tester** passionate about ensuring software quality and de
 ## 📫 Find out more about me & feel free to connect with me here:
 <p align="center">
 	<a
-		href-"https://www.linkedin.com/in/pranjal-singh-b5b7ab342">
+	 href="https://www.linkedin.com/in/pranjal-singh-b5b7ab342">
 		<img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" />
 	</a>
 	<a
