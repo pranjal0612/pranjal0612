@@ -1,0 +1,209 @@
+package com.appium.page.viewspage;
+
+import com.appium.action.AndroidAction;
+import io.appium.java_client.AppiumBy;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.Assert;
+
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
+
+public class DateWidgetsDialogPage extends AndroidAction {
+    private static final String ACC_ID_VIEWS = "Views";
+    private static final String ACC_ID_DATE_WIDGETS = "Date Widgets";
+    private static final String ACC_ID_DIALOG = "1. Dialog";
+    private static final String ACC_ID_CHANGE_DATE = "change the date";
+    private static final String ACC_ID_CHANGE_TIME = "change the time";
+    private static final String ACC_ID_CHANGE_TIME_SPINNER = "change the time (spinner)";
+    private static final String ID_YEAR = "android:id/date_picker_header_year";
+    private static final String ID_WANTED_YEAR = "android:id/text1";
+    private static final String ACC_ID_PREVIOUS_MONTH = "Previous month";
+    private static final String ACC_ID_NEXT_MONTH = "Next month";
+    private static final String ID_OK_BUTTON = "android:id/button1";
+    private static final String ID_CANCEL_BUTTON = "android:id/button2";
+    private static final String ID_SELECTED_DATE = "io.appium.android.apis:id/dateDisplay";
+    private static final String ID_MONTH_HEADER = "android:id/date_picker_header_date";
+
+    private WebDriverWait wait;
+
+    public DateWidgetsDialogPage() {
+        this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+    }
+
+    public void navigateToDatePicker() {
+        driver.findElement(AppiumBy.accessibilityId(ACC_ID_VIEWS)).click();
+        driver.findElement(AppiumBy.accessibilityId(ACC_ID_DATE_WIDGETS)).click();
+        driver.findElement(AppiumBy.accessibilityId(ACC_ID_DIALOG)).click();
+        driver.findElement(AppiumBy.accessibilityId(ACC_ID_CHANGE_DATE)).click();
+    }
+
+    public void selectDate(int day, int month, int year) {
+        navigateToDatePicker();
+        wait.until(ExpectedConditions.presenceOfElementLocated(AppiumBy.id(ID_YEAR)));
+        setYear(year);
+        navigateToMonth(day, month, year);
+        selectDay(day);
+        confirmSelection();
+        String expectedDate = month + "-" + day + "-" + year;
+        verifySelectedDate(expectedDate);
+    }
+
+    private void setYear(int targetYear) {
+        try {
+
+            WebElement yearElement = driver.findElement(By.id(ID_YEAR));
+            yearElement.click();
+
+            WebElement element = driver.findElement(By.id(ID_WANTED_YEAR));
+            scroll(element, "down", 0.75);
+
+            String yearText = String.valueOf(targetYear);
+            WebElement targetYearElement = driver.findElement(AppiumBy.androidUIAutomator(
+                    "new UiSelector().text(\"" + yearText + "\")"));
+            targetYearElement.click();
+
+        } catch (Exception e) {
+            System.out.println("Year selection failed: " + e.getMessage());
+        }
+    }
+
+    private void navigateToMonth(int targetDay, int targetMonth, int targetYear) {
+        try {
+            LocalDate currentDate = getCurrentDisplayedDate();
+            LocalDate targetDate = LocalDate.of(targetYear, targetMonth, targetDay);
+
+            int monthsDifference = calculateMonthsDifference(currentDate, targetDate);
+
+            if (monthsDifference > 0) {
+                for (int i = 0; i < monthsDifference; i++) {
+                    clickNextMonth();
+                    Thread.sleep(500);
+                }
+            } else if (monthsDifference < 0) {
+                for (int i = 0; i < Math.abs(monthsDifference); i++) {
+                    clickPreviousMonth();
+                    Thread.sleep(500);
+                }
+            }
+
+        } catch (Exception e) {
+            System.out.println("Month navigation failed: " + e.getMessage());
+        }
+    }
+
+    private LocalDate getCurrentDisplayedDate() {
+        try {
+            WebElement monthHeader = driver.findElement(AppiumBy.id(ID_MONTH_HEADER));
+            String headerText = monthHeader.getText();
+            return parseHeaderDate(headerText);
+
+        } catch (Exception e) {
+            System.out.println("Could not parse current date, using current date as fallback");
+            return LocalDate.now();
+        }
+    }
+
+    private LocalDate parseHeaderDate(String headerText) {
+        try {
+            String[] formats = {
+                    "MMMM yyyy",
+                    "MMM yyyy",
+                    "MM/yyyy",
+                    "yyyy-MM",
+                    "MMMM, yyyy"
+            };
+
+            for (String format : formats) {
+                try {
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern(format, Locale.ENGLISH);
+                    return LocalDate.parse(headerText.trim(), formatter).withDayOfMonth(1);
+                } catch (Exception ignored) {
+                }
+            }
+
+            return extractDateFromText(headerText);
+
+        } catch (Exception e) {
+            return LocalDate.now();
+        }
+    }
+
+    private LocalDate extractDateFromText(String text) {
+        String yearStr = text.replaceAll(".*?(\\d{4}).*", "$1");
+        int year = Integer.parseInt(yearStr);
+        System.out.println(year);
+
+        String[] months = {"january", "february", "march", "april", "may", "june",
+                "july", "august", "september", "october", "november", "december"};
+
+        String lowerText = text.toLowerCase();
+        for (int i = 0; i < months.length; i++) {
+            if (lowerText.contains(months[i]) || lowerText.contains(months[i].substring(0, 3))) {
+                return LocalDate.of(year, i + 1, 1);
+            }
+        }
+
+        return LocalDate.now();
+    }
+
+    private int calculateMonthsDifference(LocalDate current, LocalDate target) {
+        return target.getMonthValue() - current.getMonthValue();
+    }
+
+
+    private void clickNextMonth() {
+        try {
+            WebElement nextButton = wait.until(ExpectedConditions.elementToBeClickable(
+                    AppiumBy.accessibilityId(ACC_ID_NEXT_MONTH)));
+            nextButton.click();
+        } catch (Exception e) {
+            System.out.println("Next month button not found or not clickable");
+        }
+    }
+
+    private void clickPreviousMonth() {
+        try {
+            WebElement prevButton = wait.until(ExpectedConditions.elementToBeClickable(
+                    AppiumBy.accessibilityId(ACC_ID_PREVIOUS_MONTH)));
+            prevButton.click();
+        } catch (Exception e) {
+            System.out.println("Previous month button not found or not clickable");
+        }
+    }
+
+    private void selectDay(int day) {
+        try {
+            WebElement dayElement = driver.findElement(
+                    AppiumBy.androidUIAutomator("new UiSelector().text(\"" + day + "\").className(\"android.view.View\")")
+            );
+            dayElement.click();
+        } catch (Exception e) {
+            System.out.println("Could not find or click day " + day + ": " + e.getMessage());
+        }
+    }
+
+
+    private void confirmSelection() {
+        try {
+            WebElement okButton = driver.findElement(AppiumBy.id(ID_OK_BUTTON));
+            okButton.click();
+        } catch (Exception e) {
+            System.out.println("OK button not found: " + e.getMessage());
+        }
+    }
+
+    private void verifySelectedDate(String expectedDate) {
+        String actualDate = driver.findElement(By.id(ID_SELECTED_DATE)).getAttribute("text");
+        System.out.println("After select date --> " + actualDate);
+
+        String actualDateOnly = actualDate.split(" ")[0];
+
+        Assert.assertEquals(actualDateOnly, expectedDate, "Date mismatch!");
+    }
+
+}
